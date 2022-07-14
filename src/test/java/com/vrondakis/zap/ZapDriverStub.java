@@ -217,6 +217,11 @@ public class ZapDriverStub implements ZapDriver {
     }
 
     @Override
+    public void clearZapAlerts() throws ZapExecutionException {
+
+    }
+
+    @Override
     public void setZapRootCaFile(String rootCaFile) {
         this.rootCaFile = rootCaFile;
     }

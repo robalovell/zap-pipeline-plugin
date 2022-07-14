@@ -422,6 +422,15 @@ public class ZapDriverImpl implements ZapDriver {
         return progress;
     }
 
+    @Override
+    public void clearZapAlerts() throws ZapExecutionException {
+        JSONObject result = zapApi("alert/action/deleteAllAlerts");
+        boolean isOk = result.has("Result") && result.getString("Result").equals("OK");
+        if (!(isOk)) {
+            throw new ZapExecutionException("Request to clear alert data returned a non-'OK' result.");
+        }
+    }
+
     /**
      * Starts the ZAP process
      *
@@ -522,6 +531,8 @@ public class ZapDriverImpl implements ZapDriver {
 
         throw new ZapExecutionException("Timed out waiting for ZAP application to become active for new connections.");
     }
+
+
 
     public String getZapReport() throws IOException, UnirestException, URISyntaxException {
         URI uri = new URI("http", null, zapHost, zapPort, "/OTHER/core/other/jsonreport", "formMethod=GET", null);

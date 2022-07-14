@@ -21,7 +21,6 @@ public class ArchiveZapStepParameters implements Serializable {
         this.failHighAlerts = failHighAlerts == null ? DEFAULT_FAIL_HIGH : failHighAlerts;
         this.failMediumAlerts = failMediumAlerts == null ? DEFAULT_FAIL_MED : failMediumAlerts;
         this.failLowAlerts = failLowAlerts == null ? DEFAULT_FAIL_LOW : failLowAlerts;
-        this.failLowAlerts = failLowAlerts == null ? DEFAULT_FAIL_LOW : failLowAlerts;
         this.falsePositivesFilePath = falsePositivesFilePath == null ? DEFAULT_FALSE_POSITIVES_FILE_PATH : falsePositivesFilePath;
         this.keepAlive = keepAlive;
     }

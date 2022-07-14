@@ -87,4 +87,6 @@ public interface ZapDriver {
     int zapRecordsToScan() throws ZapExecutionException;
 
     List<PluginProgress> zapAttackProgress();
+
+    void clearZapAlerts() throws ZapExecutionException;
 }
