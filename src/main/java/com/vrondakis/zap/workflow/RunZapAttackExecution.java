@@ -34,15 +34,6 @@ public class RunZapAttackExecution extends SynchronousNonBlockingStepExecution<V
         listener.getLogger().println("zap: Starting attack...");
         ZapDriver zapDriver = ZapDriverController.getZapDriver(run, listener.getLogger());
 
-        // Change to attack mode in ZAP
-        try {
-            zapDriver.setZapMode("attack");
-            listener.getLogger().println("zap: Set mode to attack mode");
-        } catch (Exception e) {
-            getContext().onSuccess(new ZapExecutionException("Failed to switch ZAP to attack mode.", e, listener.getLogger()));
-            return null;
-        }
-
         // Start the attack on the collected urls
         try {
             zapDriver.zapAttack(runZapAttackStepParameters);

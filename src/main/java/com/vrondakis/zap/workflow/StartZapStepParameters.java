@@ -17,9 +17,11 @@ public class StartZapStepParameters {
     private String sessionPath;
     private String rootCaFile;
     private boolean externalZap;
+    private boolean keepDefaultInstallDIR;
 
     public StartZapStepParameters(String host, int port, int timeout, String zapHome, List<String> allowedHosts,
-                                  String sessionPath, boolean externalZap, String rootCaFile, List<String> additionalConfigurations) {
+                                  String sessionPath, boolean externalZap, String rootCaFile, List<String> additionalConfigurations,
+                                  boolean keepDefaultInstallDIR) {
 
         this.host = host;
         this.port = port;
@@ -30,7 +32,7 @@ public class StartZapStepParameters {
         this.rootCaFile = rootCaFile;
         this.additionalConfigurations = (additionalConfigurations == null || additionalConfigurations.isEmpty()) ? DEFAULT_ADDITIONAL_CONFIGURATIONS: additionalConfigurations;
         this.externalZap = externalZap;
-
+        this.keepDefaultInstallDIR = keepDefaultInstallDIR;
     }
 
 
@@ -72,5 +74,9 @@ public class StartZapStepParameters {
 
     public void setExternalZap(boolean externalZap) {
         this.externalZap = externalZap;
+    }
+
+    public boolean isKeepDefaultInstallDIR() {
+        return keepDefaultInstallDIR;
     }
 }

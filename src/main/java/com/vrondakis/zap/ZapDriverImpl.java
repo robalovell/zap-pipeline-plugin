@@ -76,6 +76,7 @@ public class ZapDriverImpl implements ZapDriver {
             InputStream response = Unirest.get(uri.toString()).asString().getRawBody();
 
             String res = IOUtils.toString(response, StandardCharsets.UTF_8);
+
             JSONObject value = JSONObject.fromObject(res);
             if (value == null) {
                 throw new ZapExecutionException("ZAP API returned an empty response.");
@@ -234,10 +235,9 @@ public class ZapDriverImpl implements ZapDriver {
     public void loadPolicy(String policy) throws ZapExecutionException {
         Map<String, String> arguments = Collections.singletonMap("path", policy);
         JSONObject result = zapApi("ascan/action/importScanPolicy", arguments);
-
         boolean isOk = result.has("Result") && result.getString("Result").equals("OK");
         boolean alreadyExists = result.has("code") && result.getString("code").equals("already_exists");
-        if (isOk || alreadyExists) {
+        if (!(isOk || alreadyExists)) {
             throw new ZapExecutionException("Request to import scan policy returned a non-'OK' result.");
         }
     }
@@ -343,6 +343,7 @@ public class ZapDriverImpl implements ZapDriver {
         }
 
         JSONObject result = zapApi("ascan/action/" + scanMode, arguments);
+        logger.println(result);
         int zapScanId = result.getInt(scanMode);
         startedScans.add(zapScanId);
 
@@ -396,19 +397,22 @@ public class ZapDriverImpl implements ZapDriver {
             Map<String, String> arguments = Collections.singletonMap("scanId", Integer.toString(startedScan));
             try {
                 JSONObject json = zapApi("ascan/view/scanProgress", arguments);
-                JSONArray scanProgress = json.getJSONArray("scanProgress").getJSONObject(1).getJSONArray("HostProcess");
+                JSONArray scanProgressArray = json.getJSONArray("scanProgress");
+                if (!scanProgressArray.isEmpty()) {
+                    JSONArray scanProgress = scanProgressArray.getJSONObject(1).getJSONArray("HostProcess");
 
-                for (Object plugin: scanProgress) {
-                    JSONArray status = JSONObject.fromObject(plugin).getJSONArray("Plugin");
-                    progress.add(new PluginProgress(
-                            status.getString(0),
-                            status.getString(1),
-                            status.getString(2),
-                            status.getString(3),
-                            status.getString(4),
-                            status.getString(5),
-                            status.getString(6)
-                    ));
+                    for (Object plugin : scanProgress) {
+                        JSONArray status = JSONObject.fromObject(plugin).getJSONArray("Plugin");
+                        progress.add(new PluginProgress(
+                                status.getString(0),
+                                status.getString(1),
+                                status.getString(2),
+                                status.getString(3),
+                                status.getString(4),
+                                status.getString(5),
+                                status.getString(6)
+                        ));
+                    }
                 }
             } catch (JSONException | ZapExecutionException e) {
                 // Do nothing

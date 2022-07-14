@@ -71,7 +71,6 @@ public class ZapDriverController {
             zapDrivers.remove(run.getUrl());
         }
     }
-
     // Converts map of parameters to URL parameters
     static String formatParams(Map<String, String> params) {
         return params.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.joining("&"));
@@ -84,4 +83,5 @@ public class ZapDriverController {
     public static void clearAll() {
         zapDrivers.clear();
     }
+
 }

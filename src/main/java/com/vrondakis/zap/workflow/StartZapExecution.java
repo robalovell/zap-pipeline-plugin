@@ -71,11 +71,13 @@ public class StartZapExecution extends DefaultStepExecutionImpl {
 
         // create a temp folder where zap will write
         FilePath zapDir = null;
-        try {
-            zapDir = workspace.createTempDir( "zaptemp", "");
-        } catch (IOException | InterruptedException e) {
-            getContext().onFailure(new ZapExecutionException("Unable to create temporary zap folder.", e, listener.getLogger()));
-            return false;
+        if(!zapStepParameters.isKeepDefaultInstallDIR()) {
+            try {
+                zapDir = workspace.createTempDir("zaptemp", "");
+            } catch (IOException | InterruptedException e) {
+                getContext().onFailure(new ZapExecutionException("Unable to create temporary zap folder.", e, listener.getLogger()));
+                return false;
+            }
         }
 
         ZapDriver zapDriver = ZapDriverController.newDriver(this.run, listener.getLogger());
